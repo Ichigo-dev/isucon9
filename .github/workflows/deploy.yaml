@@ -20,9 +20,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    - run: echo ${{ env.key }} > ~/.ssh/id_rsa
     - name: benchmark
       run: |
-        ssh -i ${{ env.key }} ${{ env.user }}@${{ env.host }} echo hello
+        ssh -i ~/.ssh/id_rsa ${{ env.user }}@${{ env.host }} echo hello
     - name: rsync deployments
       uses: burnett01/rsync-deployments@4.1
       with:
