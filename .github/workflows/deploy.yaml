@@ -44,8 +44,6 @@ jobs:
         user: ${{ env.user }}
         key: ${{ env.key }}
     - name: benchmark
-      uses: fifsky/ssh-action@master
-      with:
       run: |
         ssh ${{env.user }}@${{ env.host }} echo hello
         # cd ~/isucari
