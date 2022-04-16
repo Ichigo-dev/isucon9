@@ -20,7 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - run: echo '${{ env.key }}' > ~/.ssh/id_rsa
+    - run: |
+      mkdir ~/.ssh
+      echo '${{ env.key }}' > ~/.ssh/id_rsa
     - name: benchmark
       run: |
         ssh -i ~/.ssh/id_rsa ${{ env.user }}@${{ env.host }} echo hello
