@@ -27,8 +27,10 @@ jobs:
           make
           ./isucari&
           cd ~/isucari
+          export GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
           bin/benchmarker
         host: ${{ secrets.DEPLOY_HOST_SERVER }}
         user: ${{ secrets.DEPLOY_USER_SERVER }}
         key: ${{ secrets.DEPLOY_KEY_SERVER }}
-
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: $HOME/gcp-service-account.json
