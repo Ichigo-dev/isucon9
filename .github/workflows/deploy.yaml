@@ -4,6 +4,13 @@ on:
     branches: 
       # - 'master'
 
+env:
+  GOOGLE_APPLICATION_CREDENTIALS: $HOME/gcp-service-account.json
+  host: ${{ secrets.DEPLOY_HOST_SERVER }}
+  user: ${{ secrets.DEPLOY_USER_SERVER }}
+  key: ${{ secrets.DEPLOY_KEY_SERVER }}
+  deploy_dir: $HOME/isucari/webapp
+  use_lang_dirname: go
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,11 +21,11 @@ jobs:
       with:
         switches: -avzr
         path: webapp
-        remote_path: ${{ secrets.DEPLOY_HOST_PATH }}
-        remote_host: ${{ secrets.DEPLOY_HOST_SERVER }}
-        remote_port: ${{ secrets.DEPLOY_PORT_SERVER }}
-        remote_user: ${{ secrets.DEPLOY_USER_SERVER }}
-        remote_key: ${{ secrets.DEPLOY_KEY_SERVER }}
+        remote_path: ${{ env.deploy_dir }}
+        remote_host: ${{ env.host }}
+        remote_port: 22
+        remote_user: ${{ env.user }}
+        remote_key: ${{ env.key }}
     - name: build app
       uses: fifsky/ssh-action@master
       with:
@@ -29,8 +36,6 @@ jobs:
           cd ~/isucari
           export GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
           bin/benchmarker
-        host: ${{ secrets.DEPLOY_HOST_SERVER }}
-        user: ${{ secrets.DEPLOY_USER_SERVER }}
-        key: ${{ secrets.DEPLOY_KEY_SERVER }}
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: $HOME/gcp-service-account.json
+        host: ${{ env.host }}
+        user: ${{ env.user }}
+        key: ${{ env.key }}
