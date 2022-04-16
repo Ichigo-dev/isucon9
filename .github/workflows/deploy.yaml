@@ -9,6 +9,7 @@ env:
   host: ${{ secrets.DEPLOY_HOST_SERVER }}
   user: ${{ secrets.DEPLOY_USER_SERVER }}
   key: ${{ secrets.DEPLOY_KEY_SERVER }}
+  deploy_dir: isucari/webapp
   use_lang_dirname: go
 jobs:
   build:
@@ -20,8 +21,8 @@ jobs:
       with:
         switches: -avzr
         path: webapp
+        remote_path: ~/${{ env.deploy_dir }}
         remote_host: ${{ env.host }}
-        remote_path: ~/isucari/webapp
         remote_port: 22
         remote_user: ${{ env.user }}
         remote_key: ${{ env.key }}
