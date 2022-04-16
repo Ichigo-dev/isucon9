@@ -19,3 +19,14 @@ jobs:
         remote_port: ${{ secrets.DEPLOY_PORT_SERVER }}
         remote_user: ${{ secrets.DEPLOY_USER_SERVER }}
         remote_key: ${{ secrets.DEPLOY_KEY_SERVER }}
+    - name: build app
+      uses: fifsky/ssh-action@master
+      with:
+        command: |
+          cd ~/isucari/webapp/go
+          make
+          sudo systemctl restart isucari.golang
+        host: ${{ secrets.DEPLOY_HOST_SERVER }}
+        user: ${{ secrets.DEPLOY_USER_SERVER }}
+        key: ${{ secrets.DEPLOY_KEY_SERVER }}
+
