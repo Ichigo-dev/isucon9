@@ -25,7 +25,9 @@ jobs:
         command: |
           cd ~/isucari/webapp/go
           make
-          sudo systemctl restart isucari.golang
+          ./isucari&
+          cd ~/isucari
+          bin/benchmarker
         host: ${{ secrets.DEPLOY_HOST_SERVER }}
         user: ${{ secrets.DEPLOY_USER_SERVER }}
         key: ${{ secrets.DEPLOY_KEY_SERVER }}
