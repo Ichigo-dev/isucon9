@@ -21,8 +21,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - run: |
-      mkdir ~/.ssh
-      echo '${{ env.key }}' > ~/.ssh/id_rsa
+        mkdir ~/.ssh
+        touch ~/.ssh/id_rsa
+        echo '${{ env.key }}' > ~/.ssh/id_rsa
     - name: benchmark
       run: |
         ssh -i ~/.ssh/id_rsa ${{ env.user }}@${{ env.host }} echo hello
