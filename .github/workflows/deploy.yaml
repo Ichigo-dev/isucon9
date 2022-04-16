@@ -43,11 +43,11 @@ jobs:
         host: ${{ env.host }}
         user: ${{ env.user }}
         key: ${{ env.key }}
-     - name: benchmark
-       uses: fifsky/ssh-action@master
-       with:
-       run: |
-         ssh ${{env.user }}@${{ env.host }} echo hello
-         # cd ~/isucari
-         # export GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
-         # bin/benchmarker
+    - name: benchmark
+      uses: fifsky/ssh-action@master
+      with:
+      run: |
+        ssh ${{env.user }}@${{ env.host }} echo hello
+        # cd ~/isucari
+        # export GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
+        # bin/benchmarker
