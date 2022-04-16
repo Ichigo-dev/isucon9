@@ -1,0 +1,54 @@
+name: Deploy to Server
+on:
+  push:
+    branches: 
+      # - 'master'
+
+env:
+  # SSH config
+  host: ${{ secrets.DEPLOY_HOST_SERVER }}
+  user: ${{ secrets.DEPLOY_USER_SERVER }}
+  key: ${{ secrets.DEPLOY_KEY_SERVER }}
+  # Deploy Directoryname
+  deploy_dir: isucari/webapp
+  # Use language
+  use_lang_dirname: go
+  # exec file
+  entrypoint: isucari
+  # other
+  GOOGLE_APPLICATION_CREDENTIALS: $HOME/gcp-service-account.json
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - run: |
+        mkdir ~/.ssh
+        touch ~/.ssh/id_rsa_action
+        echo '${{ env.key }}' > ~/.ssh/id_rsa
+    - name: benchmark
+      run: |
+        ssh -i ~/.ssh/id_rsa_action ${{ env.user }}@${{ env.host }} echo hello
+    - name: rsync deployments
+      uses: burnett01/rsync-deployments@4.1
+      with:
+        switches: -avzr
+        path: webapp
+        remote_path: ~/${{ env.deploy_dir }}
+        remote_host: ${{ env.host }}
+        remote_port: 22
+        remote_user: ${{ env.user }}
+        remote_key: ${{ env.key }}
+    - name: build app
+      uses: fifsky/ssh-action@master
+      with:
+        command: |
+          cd ~/${{ env.deploy_dir }}/${{ env.use_lang_dirname }}
+          make
+          ./${{ env.entrypoint }}&
+        host: ${{ env.host }}
+        user: ${{ env.user }}
+        key: ${{ env.key }}
+        # cd ~/isucari
+        # export GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS
+        # bin/benchmarker
